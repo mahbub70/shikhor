@@ -21,13 +21,20 @@
         <div class="row">
             <div class="col-sm-12">
               <div class="card card-table">
-                <div class="card-header">Class Video List
-                  <div class="tools dropdown"><span class="icon mdi mdi-download"></span><a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown"><span class="icon mdi mdi-more-vert"></span></a>
-                    <div class="dropdown-menu" role="menu"><a class="dropdown-item" href="#">Action</a><a class="dropdown-item" href="#">Another action</a><a class="dropdown-item" href="#">Something else here</a>
-                      <div class="dropdown-divider"></div><a class="dropdown-item" href="#">Separated link</a>
-                    </div>
-                  </div>
+                <div class="card-header d-flex justify-content-between align-items-center">
+                  <span>Class Video List</span>
+                  <a href="{{ route('admin.class-video-add-form') }}" class="btn btn-primary">Add Video</a>
                 </div>
+                @if (session('success'))
+                    <div class="alert alert-success p-3 w-50 m-auto mt-2">
+                        <strong>Success!</strong> {!! session('success') !!}
+                    </div>                        
+                @endif
+                @if (session('error'))
+                    <div class="alert alert-danger p-3 w-50 m-auto mt-2">
+                        <strong>Faild!</strong> {!! session('error') !!}
+                    </div>                        
+                @endif
                 <div class="card-body">
                     @if ($all_videos->count() == 0)
                         <div class="text-dark text-center p-4 font-weight-bold">No Data Found!</div>
@@ -42,6 +49,7 @@
                             <th>Author</th>
                             <th>Type</th>
                             <th>Upload Time</th>
+                            <th>Status</th>
                             <th>Action</th>
                           </tr>
                         </thead>
@@ -57,37 +65,25 @@
                                     @endif
                                 </td>
                                 <td class="center">{{ (($video->title != "")?substr($video->title,0,20).'...':'Empty') }}</td>
-                                <td class="center">{{ (($video->description != "")?substr($video->description,0,30).'...':'Empty') }}</td>
+                                <td class="center">{!! (($video->description != "")?substr($video->description,0,30).'...':'Empty') !!}</td>
                                 <td class="center">{{ (($video->author != "")?substr($video->author,0,30).'...':'Empty') }}</td>
                                 <td>{{ CustomHelper::get_class_type($video->type) }}</td>
                                 <td class="center">{{ \Carbon\Carbon::parse($video->created_at)->diffForHumans() }}</td>
 
+                                <td>{{ CustomHelper::get_status($video->status) }}</td>
+
                                 <td class="center">
-                                    <a href="#" class="btn btn-primary">Edit</a>    
-                                    <a href="#" class="btn btn-danger">Delete</a>    
+                                    <a href="{{ route('admin.class-video-edit-form',encrypt($video->id)) }}" class="btn btn-primary">Edit</a>    
+                                    <a href="{{ route('admin.class-video.delete',encrypt($video->id)) }}" class="btn btn-danger videoDeleteBtn" onclick="event.preventDefault(); if(confirm('Are You Sure?') === true) {
+                                      document.getElementById('class-video-del-form<?=($key)?>').submit();
+                                    }
+                                      ">Delete</a>    
                                 </td>
+                                <form id="class-video-del-form<?=($key)?>" action="{{ route('admin.class-video.delete',encrypt($video->id)) }}" method="POST" class="d-none">
+                                  @csrf
+                                </form>
                               </tr>
                             @endforeach
-                          {{-- <tr class="even gradeC">
-                            <td>Trident</td>
-                            <td>
-                              Internet
-                              Explorer 5.0
-                            </td>
-                            <td>Win 95+</td>
-                            <td class="center">5</td>
-                            <td class="center">C</td>
-                          </tr>
-                          <tr class="odd gradeA">
-                            <td>Trident</td>
-                            <td>
-                              Internet
-                              Explorer 5.5
-                            </td>
-                            <td>Win 95+</td>
-                            <td class="center">5.5</td>
-                            <td class="center">A</td>
-                          </tr> --}}
                         </tbody>
                       </table>
                     @endif

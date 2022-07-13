@@ -22,6 +22,11 @@
                             <strong>Success!</strong> {!! session('success') !!}
                         </div>                        
                     @endif
+                    @if (session('error'))
+                        <div class="alert alert-danger p-3 w-50 m-auto mt-2">
+                            <strong>Faild!</strong> {!! session('error') !!}
+                        </div>                        
+                    @endif
                   <div class="card-body">
                     <form action="{{ route('admin.class-video-add') }}" method="POST" id="video_add_form" enctype="multipart/form-data">
                         @csrf

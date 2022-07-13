@@ -23,6 +23,7 @@ return new class extends Migration
             $table->text('link')->nullable();
             $table->string('video_file')->nullable();
             $table->string('video_thumb')->nullable();
+            $table->integer('status')->default('1');
             $table->timestamps();
         });
     }

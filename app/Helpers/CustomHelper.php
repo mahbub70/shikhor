@@ -21,4 +21,18 @@ class CustomHelper {
     }
 
 
+    public static function get_status($int)
+    {
+        if(is_int($int) === true) {
+            if($int === 1) {
+                return "Active";
+            }else {
+                return "Paused";
+            }
+        }else {
+            return "Only integer accept.";
+        }
+    }
+
+
 }

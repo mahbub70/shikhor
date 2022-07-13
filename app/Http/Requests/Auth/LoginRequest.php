@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests\Auth;
 
+use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
@@ -45,11 +47,16 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
-        if (! Auth::attempt($this->only('email', 'password'), $this->filled('remember'))) {
+        if (! Auth::attempt(['email'=>$this->email,'password'=>$this->password,'status'=>1], $this->filled('remember'))) {
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([
                 'email' => __('auth.failed'),
+            ]);
+        }else {
+            // Update Last login Time
+            $update = User::where('email',$this->email)->update([
+                'last_login' => Carbon::now(),
             ]);
         }
 
