@@ -68,7 +68,7 @@
                             <td class="center">{{ (($item->batch_id != "")?substr($item->batch_id,0,20).'...':'Empty') }}</td>
                             <td>{{ $item->position }}</td>
                             <td>{{ $item->address }}</td>
-                            <td class="center">{!! (($item->desc != "")?substr($item->desc,0,25).'...':'Empty') !!}</td>
+                            <td class="center">{!! (strlen($item->desc) > 25)?substr(strip_tags($item->desc),0,25).'...':$item->desc !!}</td>
                             <td class="center">
                                 <a href="{{ route('admin.success.people.edit-form',encrypt($item->id)) }}" class="btn btn-primary">Edit</a>    
                                 <a href="javacript:void(0)" class="btn btn-danger productDeleteBtn" onclick="event.preventDefault(); if(confirm('Are You Sure?') === true) {

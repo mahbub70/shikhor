@@ -8,6 +8,11 @@
 
 <link rel="stylesheet" href="{{ asset('themes/admin/lib/summernote/summernote-bs4.css') }}">
     
+<style>
+    .youtube_video iframe {
+        max-width: 700px;
+    }
+</style>
 @endsection
 
 @section('content')
@@ -66,9 +71,9 @@
                         <label for="inputAuthorInfo">Video Type</label>
                         <select name="type" id="" class="form-control @error('type') is-invalid @enderror">
                             <option value="" selected disabled>Choose One</option>
-                            <option value="0" >Free Video</option>
-                            <option value="1" >Class Video</option>
-                            <option value="2" >Live Video</option>
+                            <option value="0" @if ($video->type == 0) selected @endif>Free Video</option>
+                            <option value="1" @if ($video->type == 1) selected @endif>Class Video</option>
+                            <option value="2" @if ($video->type == 2) selected @endif>Live Video</option>
                         </select>
                         @error('type')
                             <span class="invalid-feedback" role="alert">
@@ -97,6 +102,13 @@
                         @enderror
                       </div>
 
+                      {{-- Show Embed Videos --}}
+                      @if ($video->link != "")
+                        <div class="youtube_video" style="max-width: 700px">
+                            {!! $video->link !!}
+                        </div>
+                      @endif
+
                       <div class="form-group">
                         <label for="inputVideoLink">Upload Video</label>
                         <input class="form-control @error('video_file') is-invalid @enderror" type="file" name="video_file">
@@ -106,6 +118,15 @@
                             </span>
                         @enderror
                       </div>
+
+                      {{-- Show Uploaded Video --}}
+                      @if ($video->video_file != "") 
+                        <div class="video-show mb-4">
+                            <video width="320" height="240" controls>
+                                <source src="{{ asset('themes/admin/class-videos') }}/{{ $video->video_file }}" type="video/mp4">
+                            </video>
+                        </div>
+                      @endif
 
                       <div class="form-group">
                         <label for="inputVideoThumb">Upload Video Thumbnails (Optional)</label>
@@ -117,10 +138,14 @@
                         @enderror
                       </div>
 
+                      <div class="video_thumb">
+                        <img width="320" src="{{ asset('themes/admin/thumbnails') }}/{{ $video->video_thumb }}" alt="">
+                      </div>
+
                       <div class="row pt-3">
                         <div class="col-sm-12">
                           <p class="text-right">
-                            <button class="btn btn-primary" type="submit" id="video_add_form_btn">Add Video</button>
+                            <button class="btn btn-primary" type="submit" id="video_add_form_btn">Update</button>
                           </p>
                         </div>
                       </div>

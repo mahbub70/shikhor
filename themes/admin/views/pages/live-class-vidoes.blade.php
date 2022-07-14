@@ -55,7 +55,7 @@
                                     @endif
                                 </td>
                                 <td class="center">{{ (($video->title != "")?substr($video->title,0,20).'...':'Empty') }}</td>
-                                <td class="center">{!! (($video->description != "")?substr($video->description,0,30).'...':'Empty') !!}</td>
+                                <td class="center">{!! (strlen($video->description) > 20)?substr(strip_tags($video->description),0,20).'...':$video->description !!}</td>
                                 <td class="center">{{ (($video->author != "")?substr($video->author,0,30).'...':'Empty') }}</td>
                                 <td>{{ CustomHelper::get_class_type($video->type) }}</td>
                                 <td class="center">{{ \Carbon\Carbon::parse($video->created_at)->diffForHumans() }}</td>

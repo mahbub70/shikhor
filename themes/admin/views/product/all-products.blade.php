@@ -67,7 +67,7 @@
                                 </td>
                                 <td class="center">{{ (($item->name != "")?substr($item->name,0,20).'...':'Empty') }}</td>
                                 <td class="center">{{ (($item->writter != "")?substr($item->writter,0,20).'...':'Empty') }}</td>
-                                <td class="center">{!! (($item->desc != "")?substr($item->desc,0,25).'...':'Empty') !!}</td>
+                                <td class="center">{!! (strlen($item->desc) > 25)?substr(strip_tags($item->desc),0,25).'...':$item->desc !!}</td>
                                 <td>{{ $item->category->name }}</td>
                                 <td>{{ $item->qty }}</td>
                                 <td class="center">{{ \Carbon\Carbon::parse($item->created_at)->diffForHumans() }}</td>

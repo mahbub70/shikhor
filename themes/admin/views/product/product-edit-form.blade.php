@@ -104,7 +104,7 @@
                       <div class="row pt-3">
                         <div class="col-sm-12">
                           <p class="text-right">
-                            <button class="btn btn-primary" type="submit" id="product_edit_form_btn">Add Book</button>
+                            <button class="btn btn-primary" type="submit" id="product_edit_form_btn">Update</button>
                           </p>
                         </div>
                       </div>

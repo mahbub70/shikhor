@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('position')->nullable();
             $table->string('grade')->nullable();
             $table->string('message')->nullable();
-            $table->string('desc')->nullable();
+            $table->text('desc')->nullable();
             $table->string('image')->default('default.jpg');
             $table->string('added_by');
             $table->timestamps();

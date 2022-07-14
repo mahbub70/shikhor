@@ -9,6 +9,7 @@ use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Arr;
 
 class SuccessPeopleController extends Controller
 {
@@ -65,6 +66,7 @@ class SuccessPeopleController extends Controller
 
         $validated['added_by'] = Auth::user()->name;
         $validated['created_at'] = Carbon::now();
+        unset($validated['image']);
 
         // Insert Information
         try{

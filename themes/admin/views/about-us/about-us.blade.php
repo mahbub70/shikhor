@@ -23,7 +23,7 @@
                             <h4>{{ $data->title }}</h4>
                         </div>
                         <div class="desc">
-                            <p>{{ $data->desc }}</p>
+                            <p>{!! $data->desc !!}</p>
                         </div>
 
                         <div class="images">

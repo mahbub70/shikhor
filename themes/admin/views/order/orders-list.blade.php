@@ -60,11 +60,10 @@
                         </thead>
                         <tbody>
                             @foreach ($orders as $key=>$item)
-                            {{ dd($item) }}
                             <tr class="odd gradeX">
                                 <td>{{ $key+1 }}</td>
                                 <td>
-                                    @if ($item->image != "")
+                                    @if ($item->product->image != "")
                                         <img style="width: 50px;height:50px;border-radius:50%;object-fit:cover" src="{{ asset('themes/admin/product') }}/{{ $item->product->image }}" alt="Product Image">
                                     @else
                                         <span>Empty</span>

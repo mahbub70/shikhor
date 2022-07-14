@@ -54,7 +54,7 @@
                             <tr class="odd gradeX">
                                 <td>{{ $key+1 }}</td>
                                 <td class="center">{{ (($item->name != "")?substr($item->name,0,20).'...':'Empty') }}</td>
-                                <td class="center">{!! (($item->desc != "")?substr($item->desc,0,25).'...':'Empty') !!}</td>
+                                <td class="center">{!! (strlen($item->desc) > 25)?substr(strip_tags($item->desc),0,25).'...':$item->desc !!}</td>
                                 <td class="center">
                                     <a href="{{ route('admin.class.edit-form',encrypt($item->id)) }}" class="btn btn-primary">Edit</a>    
                                     <a href="javacript:void(0)" class="btn btn-danger productDeleteBtn" onclick="event.preventDefault(); if(confirm('Are You Sure? Also Delete all MCQ in this Class') === true) {

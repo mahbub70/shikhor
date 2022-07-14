@@ -207,9 +207,9 @@ class ClassVideoController extends Controller
             'class_name'=>'bail|nullable|max:255',
             'type'=>'bail|required|numeric|digits_between:0,2|max:2',
             'author'=>'bail|nullable|string|max:255',
-            'link'=>'bail|required_without:video_file',
-            'video_file'=>'bail|required_without:link|mimetypes:video/avi,video/mpeg,video/quicktime,video/mp4',
-            'video_thumb' => 'bail|nullable|mimes:jpg,jpeg,svg,webp',
+            'link'=>'bail|nullable',
+            'video_file'=>'bail|mimetypes:video/avi,video/mpeg,video/quicktime,video/mp4',
+            'video_thumb' => 'bail|nullable|mimes:jpg,jpeg,svg,webp,png',
         ]);
 
         // If Single Validation Fails
@@ -326,6 +326,51 @@ class ClassVideoController extends Controller
 
             }
         }
+
+        // if Video Thumbnail-----------
+        // Old Thumb Name
+        $old_video_thumb = "";
+        if($video->video_thumb != "" || $video->video_thumb != null) {
+            $old_video_thumb = $video->video_thumb;
+        }
+
+        // Video Thimbnail if have
+        $thumb_name="";
+        if($request->hasFile('video_thumb')) {
+            $thumb_image = $request->video_thumb;
+            $thumb_ext = $thumb_image->getClientOriginalExtension();
+            $thumb_name = "thumbnail_".uniqid().$id.".".$thumb_ext;
+
+            // Remove Old Video Thumbnail
+            if($old_video_thumb != "") {
+                if(File::exists(public_path('themes/admin/thumbnails/'.$old_video_thumb))) {
+                    File::delete(public_path('themes/admin/thumbnails/'.$old_video_thumb));
+                }
+            }
+
+            // Move New Thumbnail
+            try{
+                $thumb_moved = File::move($thumb_image,public_path('themes/admin/thumbnails/'.$thumb_name));
+                if($thumb_moved == true) {
+                    $thumb_update = ClassVideo::find($id)->update([
+                        'video_thumb' => $thumb_name,
+                    ]);
+                }
+            }catch(Exception $e){
+                if(File::exists(public_path('themes/admin/thumbnails/'.$thumb_name))) {
+                    File::delete(public_path('themes/admin/thumbnails/'.$thumb_name));
+                }
+                $remove_from_db = ClassVideo::find($id)->update([
+                    'video_thumb' => null,
+                ]);
+
+                throw ValidationException::withMessages([
+                    'video_thumb' => "Video Thumbnail Not Uploaded Properly.",
+                ]);
+
+            }
+
+        } //---------
 
         return back()->with('success','Updated Successfully');
 
